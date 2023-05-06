@@ -14,7 +14,7 @@ def _save_ua_cache(ua_processed_json):
 # Define checking of existing JSON
 
 
-def _check_existing_ua_cache():
+def _is_existing_ua_cache():
     existing_flag = True
     try:
         f = open('ua_cache.json')
@@ -39,3 +39,6 @@ def _scrape_ua_me():
     return ua_raw_json
 
 # Define main functionality of getting UA with specifications
+
+
+def get_uas():
