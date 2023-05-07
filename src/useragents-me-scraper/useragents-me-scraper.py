@@ -70,7 +70,7 @@ def _process_ua(ua_raw_json):
 # Define main functionality of getting UA with specifications
 
 
-def get_uas(head=None, min_pct=0, max_pct=100, cache=True):
+def get_uas(head=None, min_pct=0, max_pct=100, substring_list=[], cache=True):
     retrieved_uas = []
 
     # If cache does not exist or is outdated
@@ -95,9 +95,11 @@ def get_uas(head=None, min_pct=0, max_pct=100, cache=True):
 
     for ua in ua_data['content']:
         # Filter according to pct and substring
-        if ua['pct'] >= min_pct and ua['pct'] <= max_pct:
+        if ua['pct'] >= min_pct and ua['pct'] <= max_pct and len(substring_list) != 0 and any(keyword in ua for keyword in substring_list):
             retrieved_uas.append(ua)
+
         # Filter according to head
         if head != None and len(retrieved_uas) == head:
             break
+
     return retrieved_uas
