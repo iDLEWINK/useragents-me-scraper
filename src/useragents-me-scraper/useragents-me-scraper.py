@@ -70,7 +70,7 @@ def _process_ua(ua_raw_json):
 # Define main functionality of getting UA with specifications
 
 
-def get_uas():
+def get_uas(cache=True):
     retrieved_uas = []
 
     # If cache does not exist or is outdated
@@ -78,14 +78,18 @@ def get_uas():
         # Process/Format
         ua_raw_json = _scrape_ua_me()
         ua_processed_json = _process_ua(ua_raw_json)
+        print('Useragents.me scraped successful.')
         # Save
-        _save_ua_cache(ua_processed_json)
-        print('Useragents.me scraped commenced.')
+        if cache:
+            _save_ua_cache(ua_processed_json)
+        else:
+            ua_data = ua_processed_json
 
-    # Loading the file
-    with open('ua_cache.json', 'r') as f:
-        print('Reading files...')
-        ua_data = json.load(f)
+    # Loading the data
+    if cache:
+        with open('ua_cache.json', 'r') as f:
+            print('Reading files...')
+            ua_data = json.load(f)
 
     retrieved_uas = ua_data['content']
     print(str(len(retrieved_uas)), 'useragents successfully retrieved.')
