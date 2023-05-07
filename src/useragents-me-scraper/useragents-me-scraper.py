@@ -3,18 +3,28 @@ import requests
 import utils
 from bs4 import BeautifulSoup
 
-# Define saving of JSON
-
 
 def _save_ua_cache(ua_processed_json):
+    """ Saves the UA data into a json file.
+
+    Parameters
+    ----------
+    ua_processed_json : dict 
+      Processed ua containing start_date, end_date, and content (list of uas, pcts).
+    """
     FILENAME = 'ua_cache.json'
     with open(FILENAME, 'w') as outfile:
         json.dump(ua_processed_json, outfile)
 
-# Define checking of existing JSON
-
 
 def _is_existing_ua_cache():
+    """ Returns true or false depending on whether a ua_cache.json exists in the local space or not.
+
+    Returns
+    -------
+    boolean
+      True if the ua_cache.json exists. False if the ua_cache.json does not exist.
+    """
     existing_flag = True
     try:
         f = open('ua_cache.json')
@@ -26,6 +36,13 @@ def _is_existing_ua_cache():
 
 
 def _is_outdated_ua_cache():
+    """ Returns true or false depending on whether the date today is past beyond the end_date in ua_cache.json.
+
+    Returns
+    -------
+    boolean
+      True if the ua_cache is outdated. False if the ua_cache is not outdated.
+    """
     outdated_flag = True
     try:
         f = open('ua_cache.json')
@@ -37,10 +54,16 @@ def _is_outdated_ua_cache():
     except:
         print('An exception concerning the ua_cache.json file has occurred.')
     return outdated_flag
-# Define basic scraping/fetching of JSON
 
 
 def _scrape_ua_me():
+    """ Returns true or false depending on whether the date today is past the end date argument or not.
+
+    Returns
+    -------
+    list
+      List of the raw scraped ua-pct dictionary key-value pairs scraped from useragents.me.
+    """
     URL = "https://www.useragents.me/"
     r = requests.get(URL)
 
@@ -52,10 +75,20 @@ def _scrape_ua_me():
 
     return ua_raw_json
 
-# Define processing of raw UA data by adding start_date, end_date, and content key
-
 
 def _process_ua(ua_raw_json):
+    """ Processes ua_raw_json by adding start_date, end_date, and nesting raw ua data inside the list content key.
+
+    Parameters
+    ----------
+    ua_raw_json : 
+      List of the raw scraped ua-pct dictionary key-value pairs scraped from useragents.me.
+
+    Returns
+    -------
+    dict
+        A dictionary with start_date, end_date, and content with ua-pct key-value pairs. 
+    """
     start_date = utils.date.today()
     end_date = start_date + utils.timedelta(days=7)
 
@@ -69,16 +102,64 @@ def _process_ua(ua_raw_json):
 
 
 def _is_valid_pct(pct, min_pct, max_pct):
+    """ Returns true or false on whether the pct is within the min_pct and max_pct valid range.
+
+    Parameters
+    ----------
+    pct : float
+      The pct of a given useragent.
+    min_pct: float
+      Min range for the pct.
+    max_pct: float
+      Max range for the pct.
+
+    Returns
+    -------
+    boolean
+      True if pct is within the range. False if pct is outside the range.
+    """
     return pct >= min_pct and pct <= max_pct
 
 
 def _contains_valid_substring(substring_list, ua_string):
+    """ Returns true or false depending on whether no substring_list was specified or any keyword inside substring_list is found within the ua_string.
+
+    Parameters
+    ----------
+    substring_list : list
+      A list containing all keywords to be searched.
+    ua_string : string
+      A useragent string to be searched with keywords for.
+
+    Returns
+    -------
+    boolean
+      True if no substring_list specified or a keyword matched within ua_string. False no keyword matched the ua_string.
+    """
     return len(substring_list) == 0 or any(keyword in ua_string for keyword in substring_list)
 
-# Define main functionality of getting UA with specifications
 
+def get_uas(head=None, min_pct=0.0, max_pct=100.0, substring_list=[], cache=True):
+    """ Returns true or false depending on whether the date today is past the end date argument or not.
 
-def get_uas(head=None, min_pct=0, max_pct=100, substring_list=[], cache=True):
+    Parameters
+    ----------
+    head : int
+      The date that the date today is going to be compared to
+    min_pct: float
+      Min range for the pct.
+    max_pct: float
+      Max range for the pct.
+    substring_list : list
+      A list containing all keywords to be searched and matched on useragents.
+    cache : boolean
+      A flag for either caching the scraped to a ua_cache.json file that has a weeklong lifetime, or directly scraping the site. 
+
+    Returns
+    -------
+    list
+      The list of useragents filtered according to the specifications passed.
+    """
     retrieved_uas = []
 
     # If cache does not exist or is outdated
