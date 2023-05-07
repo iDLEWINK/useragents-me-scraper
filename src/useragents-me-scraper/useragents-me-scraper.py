@@ -50,6 +50,21 @@ def _scrape_ua_me():
 
     return ua_raw_json
 
+# Define processing of raw UA data by adding start_date, end_date, and content key
+
+
+def _process_ua(ua_raw_json):
+    start_date = utils.date.today()
+    end_date = start_date + utils.timedelta(days=7)
+
+    ua_processed_json = {
+        "start_date": str(start_date),
+        "end_date": str(end_date),
+        "content": ua_raw_json
+    }
+
+    return ua_processed_json
+
 # Define main functionality of getting UA with specifications
 
 
@@ -57,7 +72,7 @@ def get_uas():
     if not _is_existing_ua_cache() or _is_outdated_ua_cache():
         # Need to process
         ua_raw_json = _scrape_ua_me()
-
+        ua_processed_json = _process_ua(ua_raw_json)
         # Need to save
 
     # Need to check the expiry
