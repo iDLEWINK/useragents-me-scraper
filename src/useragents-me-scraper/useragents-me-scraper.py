@@ -3,6 +3,8 @@ import requests
 import utils
 from bs4 import BeautifulSoup
 
+FILENAME = 'ua_cache.json'
+
 
 def _save_ua_cache(ua_processed_json):
     """ Saves the UA data into a json file.
@@ -12,7 +14,6 @@ def _save_ua_cache(ua_processed_json):
     ua_processed_json : dict 
       Processed ua containing start_date, end_date, and content (list of uas, pcts).
     """
-    FILENAME = 'ua_cache.json'
     with open(FILENAME, 'w') as outfile:
         json.dump(ua_processed_json, outfile)
 
@@ -25,12 +26,11 @@ def _is_existing_ua_cache():
     boolean
       True if the ua_cache.json exists. False if the ua_cache.json does not exist.
     """
-    existing_flag = True
-    try:
-        f = open('ua_cache.json')
-        f.close()
-    except:
-        existing_flag = False
+    existing_flag = False
+
+    with open(FILENAME, 'r') as f:
+        existing_flag = True
+
     return existing_flag
 
 
@@ -43,13 +43,11 @@ def _is_outdated_ua_cache():
       True if the ua_cache is outdated. False if the ua_cache is not outdated.
     """
     outdated_flag = True
-    try:
-        f = open('ua_cache.json')
+
+    with open(FILENAME, 'r') as f:
         ua_data = json.load(f)
         outdated_flag = utils.is_outdated(ua_data['end_date'])
-        f.close()
-    except:
-        print('An exception concerning the ua_cache.json file has occurred.')
+
     return outdated_flag
 
 
