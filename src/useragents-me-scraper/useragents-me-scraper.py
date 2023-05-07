@@ -30,7 +30,6 @@ def _is_existing_ua_cache():
         f = open('ua_cache.json')
         f.close()
     except:
-        print('A local ua_cache.json file does not exist.')
         existing_flag = False
     return existing_flag
 
@@ -48,8 +47,6 @@ def _is_outdated_ua_cache():
         f = open('ua_cache.json')
         ua_data = json.load(f)
         outdated_flag = utils.is_outdated(ua_data['end_date'])
-        if(outdated_flag):
-            print('ua_cache is outdated. Awaiting to scrape a new one.')
         f.close()
     except:
         print('An exception concerning the ua_cache.json file has occurred.')
@@ -167,7 +164,6 @@ def get_uas(head=None, min_pct=0.0, max_pct=100.0, substring_list=[], cache=True
         # Process/Format
         ua_raw_json = _scrape_ua_me()
         ua_processed_json = _process_ua(ua_raw_json)
-        print('Useragents.me scraped successful.')
         # Save
         if cache:
             _save_ua_cache(ua_processed_json)
@@ -177,10 +173,7 @@ def get_uas(head=None, min_pct=0.0, max_pct=100.0, substring_list=[], cache=True
     # Loading the data
     if cache:
         with open('ua_cache.json', 'r') as f:
-            print('Reading files...')
             ua_data = json.load(f)
-
-    print(str(len(ua_data['content'])), 'useragents successfully retrieved.')
 
     for ua in ua_data['content']:
         # Filter according to pct and substring
