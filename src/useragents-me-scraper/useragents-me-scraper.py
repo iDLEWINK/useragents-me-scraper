@@ -69,10 +69,10 @@ def _process_ua(ua_raw_json):
 
 
 def get_uas():
+    # If cache does not exist or is outdated
     if not _is_existing_ua_cache() or _is_outdated_ua_cache():
-        # Need to process
+        # Process/Format
         ua_raw_json = _scrape_ua_me()
         ua_processed_json = _process_ua(ua_raw_json)
-        # Need to save
-
-    # Need to check the expiry
+        # Save
+        _save_ua_cache(ua_processed_json)
