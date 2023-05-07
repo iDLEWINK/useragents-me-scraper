@@ -4,6 +4,7 @@ import utils
 from bs4 import BeautifulSoup
 
 FILENAME = 'ua_cache.json'
+URL = "https://www.useragents.me/"
 
 
 def _save_ua_cache(ua_processed_json):
@@ -28,8 +29,12 @@ def _is_existing_ua_cache():
     """
     existing_flag = False
 
-    with open(FILENAME, 'r') as f:
-        existing_flag = True
+    try:
+        f = open('ua_cache.json')
+    except:
+        existing_flag = False
+    finally:
+        f.close()
 
     return existing_flag
 
@@ -59,7 +64,6 @@ def _scrape_ua_me():
     list
       List of the raw scraped ua-pct dictionary key-value pairs scraped from useragents.me.
     """
-    URL = "https://www.useragents.me/"
     r = requests.get(URL)
 
     content = BeautifulSoup(r.content, 'html5lib')
