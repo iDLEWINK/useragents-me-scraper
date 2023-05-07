@@ -28,9 +28,11 @@ def _is_existing_ua_cache():
 def _is_outdated_ua_cache():
     outdated_flag = True
     try:
-        f = open('uacache.json')
+        f = open('ua_cache.json')
         ua_data = json.load(f)
         outdated_flag = utils.is_outdated(ua_data['end_date'])
+        if(outdated_flag):
+            print('ua_cache is outdated. Awaiting to scrape a new one.')
         f.close()
     except:
         print('An exception concerning the ua_cache.json file has occurred.')
@@ -69,6 +71,8 @@ def _process_ua(ua_raw_json):
 
 
 def get_uas():
+    retrieved_uas = []
+
     # If cache does not exist or is outdated
     if not _is_existing_ua_cache() or _is_outdated_ua_cache():
         # Process/Format
@@ -76,3 +80,14 @@ def get_uas():
         ua_processed_json = _process_ua(ua_raw_json)
         # Save
         _save_ua_cache(ua_processed_json)
+        print('Useragents.me scraped commenced.')
+
+    # Loading the file
+    with open('ua_cache.json', 'r') as f:
+        print('Reading files...')
+        ua_data = json.load(f)
+
+    retrieved_uas = ua_data['content']
+    print(str(len(retrieved_uas)), 'useragents successfully retrieved.')
+
+    return retrieved_uas
