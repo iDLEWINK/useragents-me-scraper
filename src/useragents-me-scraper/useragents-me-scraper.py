@@ -67,6 +67,14 @@ def _process_ua(ua_raw_json):
 
     return ua_processed_json
 
+
+def _is_valid_pct(pct, min_pct, max_pct):
+    return pct >= min_pct and pct <= max_pct
+
+
+def _contains_valid_substring(substring_list, ua_string):
+    return len(substring_list) == 0 or any(keyword in ua_string for keyword in substring_list)
+
 # Define main functionality of getting UA with specifications
 
 
@@ -95,9 +103,8 @@ def get_uas(head=None, min_pct=0, max_pct=100, substring_list=[], cache=True):
 
     for ua in ua_data['content']:
         # Filter according to pct and substring
-        if ua['pct'] >= min_pct and ua['pct'] <= max_pct and len(substring_list) != 0 and any(keyword in ua for keyword in substring_list):
-            retrieved_uas.append(ua)
-
+        if _is_valid_pct(ua['pct'], min_pct, max_pct) and _contains_valid_substring(substring_list, ua['ua']):
+            retrieved_uas.append(ua['ua'])
         # Filter according to head
         if head != None and len(retrieved_uas) == head:
             break
