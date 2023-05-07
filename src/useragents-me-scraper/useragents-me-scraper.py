@@ -31,6 +31,7 @@ def _is_outdated_ua_cache():
         f = open('uacache.json')
         ua_data = json.load(f)
         outdated_flag = utils.is_outdated(ua_data['end_date'])
+        f.close()
     except:
         print('An exception concerning the ua_cache.json file has occurred.')
     return outdated_flag
