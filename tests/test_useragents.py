@@ -26,3 +26,27 @@ def test_is_valid_pct_float():
 
 def test_is_not_valid_pct_float():
     assert ua._is_valid_pct(50.0, 60.9, 70.9) == False
+
+
+def test_contains_valid_substring_empty():
+    test_ua = 'Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/111.0.0.0 Safari\/537.36'
+    substring_list = []
+    assert ua._contains_valid_substring(substring_list, test_ua) == True
+
+
+def test_contains_valid_substring_true_single():
+    test_ua = 'Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/111.0.0.0 Safari\/537.36'
+    substring_list = ['AppleWebKit']
+    assert ua._contains_valid_substring(substring_list, test_ua) == True
+
+
+def test_contains_valid_substring_true_multiple():
+    test_ua = 'Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/111.0.0.0 Safari\/537.36'
+    substring_list = ['10.0', 'Windows', 'Safari', '537.36']
+    assert ua._contains_valid_substring(substring_list, test_ua) == True
+
+
+def test_contains_valid_substring_false():
+    test_ua = 'Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/111.0.0.0 Safari\/537.36'
+    substring_list = ['5347']
+    assert ua._contains_valid_substring(substring_list, test_ua) == False
