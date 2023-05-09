@@ -17,9 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "pytest"
-  "json"
-  "bs4"
+  "pytest",
+  "json",
+  "bs4",
   "requests"
 ]
 
