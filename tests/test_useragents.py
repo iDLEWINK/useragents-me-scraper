@@ -10,3 +10,19 @@ def test_process_ua():
     assert(ua.utils.convert_str_to_date(test_processed_ua['start_date']) == test_start_date and
            ua.utils.convert_str_to_date(test_processed_ua['end_date']) == test_end_date and
            test_processed_ua['content'] == test_content)
+
+
+def test_is_valid_pct_int():
+    assert ua._is_valid_pct(50, 0, 100) == True
+
+
+def test_is_not_valid_pct_int():
+    assert ua._is_valid_pct(0, 50, 100) == False
+
+
+def test_is_valid_pct_float():
+    assert ua._is_valid_pct(50.5, 50.0, 50.9) == True
+
+
+def test_is_not_valid_pct_float():
+    assert ua._is_valid_pct(50.0, 60.9, 70.9) == False
