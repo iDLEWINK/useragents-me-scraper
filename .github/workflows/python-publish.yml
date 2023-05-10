@@ -32,7 +32,7 @@ jobs:
         pip install pytest
         pip install build
     - name: Run Unit Tests
-      run: python -m pytest
+      run: python -m pytest --import-mode=append tests/
     - name: Build package
       run: python -m build
     - name: Publish package
