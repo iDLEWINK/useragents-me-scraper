@@ -18,7 +18,6 @@ classifiers = [
 ]
 dependencies = [
   "pytest",
-  "json",
   "bs4",
   "requests"
 ]
