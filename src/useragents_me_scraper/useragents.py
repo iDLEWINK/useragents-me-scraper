@@ -31,10 +31,9 @@ def _is_existing_ua_cache():
 
     try:
         f = open('ua_cache.json')
+        f.close()
     except:
         existing_flag = False
-    finally:
-        f.close()
 
     return existing_flag
 
