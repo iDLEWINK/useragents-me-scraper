@@ -1,6 +1,6 @@
 import json
 import requests
-import utils
+from useragents_me_scraper import utils
 from bs4 import BeautifulSoup
 
 FILENAME = 'ua_cache.json'
